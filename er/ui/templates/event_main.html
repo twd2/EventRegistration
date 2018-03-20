@@ -1,0 +1,84 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('赛事列表')}}</h1>
+      </div>
+    {% if not edocs %}
+      {{ nothing.render('没有赛事...') }}
+    {% else %}
+      <ol class="section__list event__list">
+      {% for edoc in edocs %}
+        <li class="section__list__item event__item">
+          <div class="media">
+            <div class="media__left medium">
+              <div class="event__date numbox">
+                <div class="numbox__num large">{{ datetime_span(edoc['_id'].generation_time, false, '%d') }}</div>
+                <div class="numbox__text">{{ datetime_span(edoc['_id'].generation_time, false, '%Y-%m') }}</div>
+              </div>
+            </div>
+            <div class="media__body medium">
+              <h1 class="event__name"><a href="{{ reverse_url('event_detail', eid=edoc['_id']) }}" data-emoji-enabled>{{ edoc['name'] }}</a></h1>
+              <div class="event__intro typo">
+                <p>{{ edoc['intro'][:50] }}</p>
+              </div>
+              <ul class="supplementary list">
+                <li>
+                  {{ user.render_inline(udict[edoc['creator_id']]) }}
+                </li>
+                <li>
+                  <span class="icon icon-user--multiple"></span> {{ edoc['num_register']|default(0) }}
+                </li>
+                <li>
+                  <span class="icon icon-preview"></span> {{ edoc['num_view']|default(0) }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+      </ol>
+      {{ paginator.render(page, epcount, add_qs=qs) }}
+    {% endif %}
+    </div>
+  </div>
+  {% if handler.has_role(er.model.builtin.ROLE_ADMIN) %}
+  <div class="medium-3 columns">
+    <div class="section side">
+      <div class="section__header">
+        <h1 class="section__title">
+          {{ _('创建赛事') }}
+        </h1>
+      </div>
+      <ol class="menu">
+        <li class="menu__item"><a class="menu__link" href="{{ reverse_url('event_add') }}">
+          <span class="icon icon-add"></span>  {{ _('创建') }}
+        </a></li>
+      </ol>
+      <div class="section__body">
+        <div class="typo supplementary">
+          <p>{{ _('您有权限创建赛事。') }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  <div class="medium-3 columns">
+    <div class="section side">
+      <div class="section__header">
+        <h1 class="section__title">
+          {{ _('标签搜索') }}
+        </h1>
+      </div>
+      <div class="section__body">
+        <label>
+          <input name="tag" type="text" class="textbox" value="{{ tag }}" autocomplete="off">
+        </label>
+        <button name="search" class="primary button">{{ _('搜索') }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

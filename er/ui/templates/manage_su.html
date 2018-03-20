@@ -1,0 +1,27 @@
+{% extends "layout/manage_base.html" %}
+{% block manage_content %}
+<div class="section">
+  <div class="section__header">
+    <h1 class="section__title">{{ _('切换用户') }}</h1>
+  </div>
+  <div class="section__body typo">
+    <form method="POST">
+      <input type="hidden" name="csrf_token" value="{{ handler.csrf_token }}">
+      <div class="row">
+        <div class="medium-6 columns">
+          <label>
+            {{ _('用户名或姓名') }}
+            <input name="username" type="text" class="textbox" autocomplete="off" data-autofocus>
+          </label>
+        </div>
+        <div class="medium-6 columns">
+          <label>
+            <br>
+            <input type="submit" value="{{ _('切换') }}" class="rounded primary button">
+          </label>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

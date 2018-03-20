@@ -1,0 +1,47 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="large-12 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('队伍简介') }}{% if handler.has_role(er.model.builtin.ROLE_ADMIN) %} [<a href="{{ reverse_url('team_edit', did=ddoc['_id']) }}">{{ _('编辑') }}</a>]{% endif %}</h1>
+      </div>
+      <div class="section__body typo">
+        {{ ddoc['bio']|markdown }}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="large-12 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('队伍成员') }}{% if handler.has_role(er.model.builtin.ROLE_ADMIN) %} [<a href="{{ reverse_url('team_edit', did=ddoc['_id']) }}">{{ _('编辑') }}</a>]{% endif %}</h1>
+      </div>
+      <div class="section__body typo">
+        <dl class="large horizontal">
+          <dt>{{ _('教练') }}</dt><dd>{{ ddoc['instructor'] }}</dd>
+          <dt>{{ _('队长') }}</dt><dd>{{ ddoc['leader'] }}</dd>
+          <dt>{{ _('队员') }}</dt><dd>{{ ddoc['members'] }}</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>
+{% if images %}
+<div class="row">
+  <div class="large-12 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('队伍风采') }}{% if handler.has_role(er.model.builtin.ROLE_ADMIN) %} [<a href="{{ reverse_url('team_edit', did=ddoc['_id']) }}">{{ _('编辑') }}</a>]{% endif %}</h1>
+      </div>
+      <div class="section__body typo">
+      {% for image in images %}
+        <p><img src="{{ image }}" width="100%"></p>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

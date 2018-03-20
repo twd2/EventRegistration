@@ -1,0 +1,27 @@
+.page--event_detail
+  .col--rank
+    width: 60px
+    border-right: 1px solid $table-border-color
+
+  .col--checkbox
+    width: 60px
+
+  .col--status
+    width: 100px
+
+  .col--more
+    width: rem(100px)
+    border-left: 1px solid $table-border-color
+
+  .pending
+    color: $invalid-color
+
+  .approved
+    color: $success-color
+
+  .rejected
+    color: $fail-color
+
+  +mobile()
+    .mobile-half-width
+      width: 50%

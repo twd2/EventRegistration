@@ -1,0 +1,13 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+  {% with udoc=udoc or handler.user %}
+  {% include "partials/register_edit.html" %}
+  {% endwith %}
+  </div>
+  <div class="medium-3 columns">
+    <!--{% include 'components/md_hint.html' %}-->
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+<div class="section">
+  <div class="section__header">
+    <h1 class="section__title">{{ _('{} 报名').format(edoc['name']) }}</h1>
+  </div>
+  <div class="section__body">
+  {% if page_name == 'event_detail' %}
+    <form action="{{ reverse_url('register_add', eid=edoc['_id']) }}" method="post">
+  {% else %}
+    <form method="post">
+  {% endif %}
+      {{ form.form_text(columns=8, label='用户名', value=udoc['username'], disabled=True) }}
+      <div class="row">
+        {{ form.form_text(columns=4, label='姓名', value=udoc['name'], disabled=True, row=False) }}
+        {{ form.form_text(columns=8, label='电子邮箱', value=udoc['mail'], disabled=True, row=False) }}
+      </div>
+      {% if udoc['_id'] == handler.user['_id'] %}
+      <blockquote class="note">
+        {{ _('前往 {} 可以检查并修改其他个人信息。').format('<a href="{}">{}</a>'.format(reverse_url('user_info'), _('这里')))|safe }}
+      </blockquote>
+      {% endif %}
+      {% if edoc['is_group'] %}
+      <div class="row">
+        {{ form.form_text(columns=4, label='队长', value=team_leader_text, autocomplete='off', row=False, name='team_leader', id='team_leader') }}
+      </div>
+      <input type="hidden" name="teammates" value="{{ teammates_text }}">
+          <div class="row">
+            {{ form.form_text(columns=4, label='队员', id='teammate', autocomplete='off', row=False) }}
+            <label>
+              <br>
+              <button type="button" class="rounded primary button" id="teammate_add">
+                {{ _('添加') }}
+              </button>
+            </label>
+          </div>
+          <ul class="register__teammates">
+          </ul>
+      {% endif %}
+      {% for field in fields %}
+      <div class="row">
+        {{ form.form_text(columns=8, label=field['name'], name='field', placeholder='', value=field['value'], disabled=False, row=False, required=True)}}
+      </div>
+      {% endfor %}
+      <div class="row"><div class="columns">
+        <input type="hidden" name="csrf_token" value="{{ handler.csrf_token }}">
+        <button type="submit" class="rounded primary button">
+        {% if page_name == 'event_detail' %}
+          {{ _('报名') }}
+        {% else %}
+          {{ _('修改') }}
+        {% endif %}
+        </button>
+      </div></div>
+    </form>
+  </div>
+</div>

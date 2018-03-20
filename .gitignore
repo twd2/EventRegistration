@@ -1,0 +1,44 @@
+# Editor temporaries.
+*~
+*.swp
+*.sublime-project
+*.sublime-workspace
+.idea/
+.vscode/
+
+# Python cache.
+__pycache__/
+*.pyc
+*.egg-info/
+
+# UI stuffs.
+node_modules/
+npm-debug.log
+.uibuild/
+.cache/
+
+# MaxMind DB.
+*.mmdb
+
+# Generated fonts
+er/ui/misc/.iconfont
+
+# Generated locales
+er/ui/static/locale
+
+# Webpack Stats
+.webpackStats.json
+
+# Coverage Reports
+.coverage
+Coverage_Python/
+
+# Database Files
+data/
+
+# Secret
+secret.sh
+
+.DS_Store
+
+!.gitkeep

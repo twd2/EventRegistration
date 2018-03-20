@@ -1,0 +1,50 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__body">
+        <form method="post">
+          {{ form.form_text(columns=8, label='队名', name='name', value=ddoc['name']|default(''), autofocus=True, required=True) }}
+          {{ form.form_textarea(columns=None, label='队伍简介', name='bio', value=ddoc['bio']|default(''), markdown=True, required=True) }}
+          <div class="row">
+            {{ form.form_text(columns=6, label='教练', name='instructor', value=ddoc['instructor']|default(''), row=False, required=True) }}
+            {{ form.form_text(columns=6, label='队长', name='leader', value=ddoc['leader']|default(''), row=False, required=True) }}
+          </div>
+          {{ form.form_text(columns=12, label='队员', name='members', value=ddoc['members']|default(''), required=True) }}
+          <input type="hidden" name="images_text" value="{{ ddoc['images_text']|default('') }}">
+          <div class="row">
+            {{ form.form_text(columns=6, label='队伍风采图片', id='images', autocomplete='off', row=False) }}
+            <label>
+              <br>
+              <button type="button" class="rounded primary button" id="images_add">
+                {{ _('添加') }}
+              </button>
+            </label>
+          </div>
+          <ul class="event__tags">
+          </ul>
+          <div class="row"><div class="columns">
+            <input type="hidden" name="csrf_token" value="{{ handler.csrf_token }}">
+          {% if page_name == 'team_edit' %}
+            <button type="submit" class="rounded primary button">
+              {{ _('更新') }}
+            </button>
+          {% else %}
+            <button type="submit" class="rounded primary button">
+              {{ _('创建') }}
+            </button>
+          {% endif %}
+            <button type="button" class="rounded button" onclick="window.history.go(-1)">
+              {{ _('取消') }}
+            </button>
+          </div></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="medium-3 columns">
+    {% include 'components/md_hint.html' %}
+  </div>
+</div>
+{% endblock %}

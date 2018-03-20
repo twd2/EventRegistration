@@ -1,0 +1,13 @@
+{% if rdoc['result'] %}
+<div class="section">
+  <div class="section__header">
+    <h1 class="section__title">{{ _('{} 成绩单').format(edoc['name']) }}</h1>
+  </div>
+  <div class="section__body typo">
+    <dl class="large horizontal">
+      <dt>{{ _('名次') }}</dt><dd>{{ rdoc['rank'] }}</dd>
+      <dt>{{ _('成绩') }}</dt><dd>{{ rdoc['result'] }}</dd>
+    </dl>
+  </div>
+</div>
+{% endif %}

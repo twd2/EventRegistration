@@ -1,0 +1,31 @@
+{% extends "layout/manage_base.html" %}
+{% block manage_content %}
+<div class="section">
+  <div class="section__header">
+    <h1 class="section__title">{{ _('发送邮件') }}</h1>
+  </div>
+  <div class="section__body typo">
+    <form method="POST">
+      <input type="hidden" name="csrf_token" value="{{ handler.csrf_token }}">
+      <div class="row">
+        <div class="medium-6 columns">
+          <label>
+            {{ _('用户名或姓名') }}
+            <input name="username" type="text" class="textbox" autocomplete="off" data-autofocus>
+          </label>
+        </div>
+      </div>
+      {{ form.form_text(columns=8, label='标题', name='title', autofocus=True, required=True) }}
+      {{ form.form_textarea(columns=None, label='内容', name='content', markdown=True, required=True) }}
+      <div class="row">
+        <div class="medium-6 columns">
+          <label>
+            <br>
+            <input type="submit" value="{{ _('发送') }}" class="rounded primary button">
+          </label>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

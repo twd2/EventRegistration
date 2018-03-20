@@ -1,0 +1,86 @@
+<div class="section side">
+  <div>
+    <ol class="menu">
+    {% if page_name == 'event_detail' %}
+    {% if handler.has_role(er.model.builtin.ROLE_ADMIN) %}
+    {% if edoc['num_register'] < edoc['register_limit'] %}
+      <li class="menu__item"><a class="menu__link" href="{{ reverse_url('register_force', eid=edoc['_id']) }}">
+        <span class="icon icon-add"></span> {{ _('钦点') }}
+      </a></li>
+    {% endif %}
+      <li class="menu__item"><a class="menu__link" href="{{ reverse_url('event_edit', eid=edoc['_id']) }}">
+        <span class="icon icon-edit"></span> {{ _('编辑') }}
+      </a></li>
+    {% if edoc['begin_at'] > handler.now %}
+      <li class="menu__item">
+        <form action="" method="POST">
+          <input type="hidden" name="operation" value="delete">
+          <input type="hidden" name="csrf_token" value="{{ handler.csrf_token }}">
+          <button class="menu__link" type="submit" id="remove_event">
+            <span class="icon icon-delete"></span> {{ _('删除') }}
+          </button>
+        </form>
+      </li>
+    {% endif %}
+    {% endif %}
+      <li class="menu__item"><a class="menu__link" href="#">
+        <span class="icon icon-help"></span> {{ _('帮助') }}
+      </a></li>
+    {% else %}
+      <li class="menu__item"><a class="menu__link" href="{{ reverse_url('event_detail', eid=edoc['_id']) }}">
+        <span class="icon icon-flag"></span> {{ _('返回赛事') }}
+      </a></li>
+    {% endif %}
+      <li class="menu__seperator"></li>
+    </ol>
+  </div>
+  <div class="section__body typo">
+    <dl class="large horizontal">
+      <dt>{{ _('当前状态') }}</dt>
+      <dd>
+      {% if handler.now < edoc['begin_at'] %}
+        {{ _('报名未开始') }}
+      {% elif edoc['begin_at'] <= handler.now < edoc['end_at'] %}
+        {{ _('正在报名') }}
+      {% else %}
+        {{ _('报名已截止') }}
+      {% endif %}
+      </dd>
+      <dt>{{ _('报名开始于') }}</dt><dd>{{ datetime_span(edoc['begin_at'], false, '%Y-%m-%d %H:%M') }}</dd>
+      <dt>{{ _('报名结束于') }}</dt><dd>{{ datetime_span(edoc['end_at'], false, '%Y-%m-%d %H:%M') }}</dd>
+      <dt>{{ _('创建者') }}</dt><dd>{{ user.render_inline(owner_udoc) }}</dd>
+      <dt>{{ _('标签') }}</dt>
+      <dd>
+        {% if edoc['tags']|length == 0 %}
+          {{ _('无') }}
+        {% else %}
+          <ul class="problem__tags">
+          {% for tag in edoc['tags'] %}
+            <li class="problem__tag">
+              <a class="problem__tag-link" href="{{ reverse_url('event_tag', tag=tag) }}">{{ tag }}</a>
+            </li>
+          {% endfor %}
+          </ul>
+        {% endif %}
+      </dd>
+      {% if edoc['is_group'] %}
+      <dt>{{ _('类型') }}</dt><dd>{{ _('团体') }}</dd>
+      <dt>{{ _('每组人数') }}</dt><dd>{{ edoc['member_lb'] }} ~ {{ edoc['member_ub'] }}</dd>
+      <dt>{{ _('组数限制') }}</dt><dd>{{ edoc['register_limit'] }}</dd>
+      <dt>{{ _('报名组数') }}</dt><dd>{{ edoc['num_register'] }}</dd>
+      {% else %}
+      <dt>{{ _('类型') }}</dt><dd>{{ _('个人') }}</dd>
+      <dt>{{ _('人数限制') }}</dt><dd>{{ edoc['register_limit'] }}</dd>
+      <dt>{{ _('报名人数') }}</dt><dd>{{ edoc['num_register'] }}</dd>
+      {% endif %}
+      <dt>{{ _('浏览次数') }}</dt><dd>{{ edoc['num_view'] }}</dd>
+    </dl>
+  </div>
+</div>
+{% if page_name == 'event_detail' %}
+<div class="section side" style="text-align: center;">
+  <a href="{{ reverse_url('qrcode') }}?a={{ reverse_url('event_detail', eid=edoc['_id']) }}" target="_blank">
+    <img src="{{ reverse_url('qrcode') }}?a={{ reverse_url('event_detail', eid=edoc['_id']) }}" width="100%" class="mobile-half-width">
+  </a>
+</div>
+{% endif %}

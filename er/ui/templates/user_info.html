@@ -1,0 +1,40 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__body">
+        {% if not handler.user['enable_at'] %}
+        <blockquote class="note">
+          {{ _('您的账号还未激活，修改并保存个人信息即可自动激活。部分信息已帮您填好，但需要您确认。') }}
+        </blockquote>
+        {% endif %}
+        <form method="post">
+          <div class="row">
+            {{ form.form_text(columns=8, label='用户名', placeholder=_('用户名'), value=handler.user['username'], disabled=True, row=False) }}
+          </div><div class="row">
+            {{ form.form_text(columns=4, label='姓名', name='name', placeholder='王大锤', value=handler.user['name'] if handler.user['name'] else default_udoc['name'], autofocus=True, row=False, required=True) }}
+            {{ form.form_text(columns=8, label='电子邮箱', name='mail', placeholder='webmaster@example.org', value=handler.user['mail'] if handler.user['mail'] else default_udoc['mail'], row=False, type='email', required=True) }}
+          </div>
+          {% for f in er.model.user.FIELDS.values() %}
+          {{ form.form_text(columns=8, label=f.name, name=f.key, placeholder=_(f.name), value=handler.user[f.key] if handler.user[f.key] else default_udoc[f.key], required=f.length_min >= 1) }}
+          {% endfor %}
+          <div class="row"><div class="columns">
+            <input type="hidden" name="csrf_token" value="{{ handler.csrf_token }}">
+            <button type="submit" class="rounded primary button">
+              {% if not handler.user['enable_at'] %}
+              {{ _('确认') }}
+              {% else %}
+              {{ _('更新') }}
+              {% endif %}
+            </button>
+          </div></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="medium-3 columns">
+    {% include 'components/md_hint.html' %}
+  </div>
+</div>
+{% endblock %}

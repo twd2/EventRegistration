@@ -1,0 +1,53 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="large-12 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('基本信息') }}{% if handler.has_role(er.model.builtin.ROLE_ADMIN) %} [<a href="{{ reverse_url('athlete_edit', did=ddoc['_id']) }}">{{ _('编辑') }}</a>]{% endif %}</h1>
+      </div>
+      <div class="section__body typo">
+        <dl class="large horizontal">
+          <dt>{{ _('姓名') }}</dt><dd>{{ ddoc['name'] }}</dd>
+          <dt>{{ _('性别') }}</dt><dd>{{ ddoc['gender'] }}</dd>
+          <dt>{{ _('级数') }}</dt><dd>{{ ddoc['grade'] }}</dd>
+          <dt>{{ _('班级') }}</dt><dd>{{ ddoc['class'] }}</dd>
+          <dt>{{ _('主要项目') }}</dt><dd>{{ ddoc['subject'] }}</dd>
+          {% if ddoc['link'] %}
+          <dt>{{ _('访谈记录') }}</dt><dd><a href="{{ ddoc['link'] }}" target="_blank">{{ ddoc['link'] }}</a></dd>
+          {% endif %}
+        </dl>
+        {{ ddoc['bio']|markdown }}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="large-12 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('个人荣誉') }}{% if handler.has_role(er.model.builtin.ROLE_ADMIN) %} [<a href="{{ reverse_url('athlete_edit', did=ddoc['_id']) }}">{{ _('编辑') }}</a>]{% endif %}</h1>
+      </div>
+      <div class="section__body typo">
+        {{ ddoc['honor']|markdown }}
+      </div>
+    </div>
+  </div>
+</div>
+{% if images %}
+<div class="row">
+  <div class="large-12 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('个人风采') }}{% if handler.has_role(er.model.builtin.ROLE_ADMIN) %} [<a href="{{ reverse_url('athlete_edit', did=ddoc['_id']) }}">{{ _('编辑') }}</a>]{% endif %}</h1>
+      </div>
+      <div class="section__body typo">
+      {% for image in images %}
+        <p><img src="{{ image }}" width="100%"></p>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+    <div class="medium-9 columns">
+        <div class="section">
+            <div class="section__body">
+                <form method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ handler.csrf_token }}">
+                    <div class="row">
+                      <div class="medium-8 columns">
+                          <label>
+                              {{ _('用户名或姓名') }}
+                              <input name="username" type="text" class="textbox" autocomplete="off" data-autofocus>
+                          </label>
+                      </div>
+                    </div>
+                    {% for field in fields %}
+                    <div class="row">
+                        {{ form.form_text(columns=8, label=field['name'], name='field', placeholder='',
+                        value=field['value'], disabled=False, row=False, required=True)}}
+                    </div>
+                    {% endfor %}
+                    <div class="row">
+                        <div class="columns">
+                            <button type="submit" class="rounded primary button">
+                                {{ _('提交') }}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="medium-3 columns">
+        <!--{% include 'components/md_hint.html' %}-->
+    </div>
+</div>
+{% endblock %}

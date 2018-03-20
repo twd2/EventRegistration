@@ -1,0 +1,32 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__body">
+        <ul class="supplementary list">
+          <li>
+            {{ user.render_inline(udoc) }}
+          </li>
+          <li>
+            {{ datetime_span(mdoc['_id'].generation_time) }}
+          </li>
+        </ul>
+        <div class="typo message__content">
+          {{ mdoc['content']|markdown }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="medium-3 columns">
+    <div class="section side">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('这是什么？') }}</h1>
+      </div>
+      <div class="section__body typo">
+        <p>{{ _('在管理员审核您的报名之后，您会在这里收到提醒消息。') }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% import "components/sidemenu.html" as sidemenu with context %}
+{% macro render_sidebar() %}
+<div class="section side">
+  <ol class="menu">
+    {{ sidemenu.render_item('info', 'manage_main') }}
+    <li class="menu__seperator"></li>
+    {{ sidemenu.render_item('comment--multiple', 'manage_message') }}
+    {{ sidemenu.render_item('mail', 'manage_mail') }}
+    {% if handler.has_role(er.model.builtin.ROLE_ROOT) %}
+    <li class="menu__seperator"></li>
+    {{ sidemenu.render_item('user--multiple', 'manage_admin') }}
+    {{ sidemenu.render_item('user', 'manage_su') }}
+    {% endif %}
+  </ol>
+</div>
+{% endmacro %}

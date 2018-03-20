@@ -1,0 +1,31 @@
+#简体中文
+---
+timeago_locale: zh_CN
+pager_first: « 第一页
+pager_last: 末页 »
+pager_next: 下一页 ›
+pager_previous: ‹ 前一页
+main: 首页
+user_info: 个人信息
+error: 错误
+manage_main: 管理
+manage_admin: 管理员设置
+manage_su: 切换用户
+user_message: 消息
+event_main: 赛事
+event_add: 创建赛事
+event_edit: 编辑赛事
+register_main: 我的报名
+register_edit: 修改报名
+register_add: 报名
+manage_message: 发送消息
+manage_mail: 发送邮件
+event_detail: 报名表
+register_force: 钦点报名
+athlete_main: 酒井名人堂
+team_main: 系代表队
+athlete_add: 创建名人
+athlete_edit: 编辑名人
+team_add: 创建队伍介绍
+team_edit: 编辑队伍介绍
+event_register_download_advanced: 高级导出

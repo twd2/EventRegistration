@@ -1,0 +1,73 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">{% if unread_only == 0 %}{{ _('全部消息') }}{% else %}{{ _('未读消息')}}{% endif %}</h1>
+        <div class="section__tools">
+          <form method="get" name="filter-form">
+            {{ _('显示') }}:
+            <select class="inline compact select" name="unread_only">
+              <option value="0"{% if unread_only == 0 %} selected{% endif %}>{{ _('全部消息') }}</option>
+              <option value="1"{% if unread_only == 1 %} selected{% endif %}>{{ _('未读消息') }}</option>
+            </select>
+            <button type="submit" class="button hasjs--hide">
+              {{ _('Go') }}
+            </button>
+          </form>
+        </div>
+      </div>
+    {% if not mdocs %}
+      {{ nothing.render('没有消息...') }}
+    {% else %}
+      <ol class="section__list message__list">
+      {% for mdoc in mdocs %}
+        <li class="section__list__item message__item{% if not mdoc['read'] %} highlight{% endif %}">
+          <div class="media">
+            <div class="media__left medium">
+              <div class="message__date numbox">
+                <div class="numbox__num large">{{ datetime_span(mdoc['_id'].generation_time, false, '%d') }}</div>
+                <div class="numbox__text">{{ datetime_span(mdoc['_id'].generation_time, false, '%Y-%m') }}</div>
+              </div>
+            </div>
+            <div class="media__body medium">
+              <h1 class="message__title"><a href="{{ reverse_url('user_message_detail', mid=mdoc['_id']) }}" data-emoji-enabled>{{ mdoc['title'] }}</a></h1>
+              <div class="message__intro typo">
+                <p>{{ mdoc['content'][:50] }}</p>
+              </div>
+              <ul class="supplementary list">
+                <li>
+                  {{ user.render_inline(udict[mdoc['sender_id']]) }}
+                </li>
+                {% if not mdoc['read'] %}
+                <li class="alert">
+                  <span class="icon icon-flag"></span> {{ _('未读') }}
+                <li>
+                {% else %}
+                <li>
+                  <span class="icon icon-check"></span> {{ _('已读') }}
+                <li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+      </ol>
+      {{ paginator.render(page, mpcount, add_qs=qs) }}
+    {% endif %}
+    </div>
+  </div>
+  <div class="medium-3 columns">
+    <div class="section side">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('这是什么？') }}</h1>
+      </div>
+      <div class="section__body typo">
+        <p>{{ _('在管理员审核您的报名之后，您会在这里收到提醒消息。') }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

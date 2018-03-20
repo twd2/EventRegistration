@@ -1,0 +1,28 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('报名列表') }}</h1>
+      </div>
+      {% if not rdocs %}
+        {{ nothing.render('没有报名...') }}
+      {% else %}
+        {% include "partials/registration_list.html" %}
+        {{ paginator.render(page, rpcount, add_qs=qs) }}
+      {% endif %}
+    </div>
+  </div>
+  <div class="medium-3 columns">
+    <div class="section side">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('如何报名') }}</h1>
+      </div>
+      <div class="section__body typo">
+        <p>{{ _('您可以在 {} 中打开相应的赛事来报名。').format('<a href="{}">{}</a>'.format(reverse_url('event_main'), _('赛事列表')))|safe }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

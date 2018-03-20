@@ -1,0 +1,56 @@
+{% macro nav_item(target_page_name, target_page_prefix) %}
+<li class="nav__list-item">
+  <a href="{{ reverse_url(target_page_name) }}" class="nav__item{% if page_name.startswith(target_page_prefix) %} nav--active{% endif %}">
+    {{ _(target_page_name) }}
+  </a>
+</li>
+{% endmacro %}
+<nav class="nav slideout-menu" id="menu">
+  <div class="row"><div class="columns clearfix">
+    <ol class="nav__list nav__list--main clearfix">
+      {{ nav_item('main', 'main') }}
+      {% if handler.has_role(er.model.builtin.ROLE_USER) %}
+      {{ nav_item('register_main', 'register') }}
+      {% endif %}
+      {{ nav_item('event_main', 'event') }}
+      {{ nav_item('athlete_main', 'athlete') }}
+      {{ nav_item('team_main', 'team') }}
+      {% if handler.has_role(er.model.builtin.ROLE_ADMIN) %}
+      {{ nav_item('manage_main', 'manage') }}
+      {% endif %}
+    </ol>
+    <ol class="nav__list nav__list--secondary clearfix">
+    {% if not handler.has_role(er.model.builtin.ROLE_USER, require_enable=False) %}
+      <li class="nav__list-item"><a href="{{ reverse_url('login') }}" class="nav__item" name="nav_login">{{ _('登录') }}</a></li>
+    {% else %}
+      <li class="nav__list-item" data-dropdown-pos="bottom right" data-dropdown-target="#menu-nav-user" data-dropdown-trigger-desktop-only>
+        <a href="{{ reverse_url('user_info') }}" class="nav__item">{{ handler.user['username'] }} <span class="icon icon-expand_more nojs--hide"></span></a>
+        <ol class="dropdown-target menu" id="menu-nav-user">
+          <li class="menu__item">
+            <a href="{{ reverse_url('user_message') }}?unread_only=0" class="menu__link">
+              <span class="icon icon-comment--multiple"></span> {{ _('消息') }}
+            </a>
+          </li>
+          <li class="menu__item">
+            <a href="{{ reverse_url('user_info') }}" class="menu__link">
+              <span class="icon icon-account--circle"></span> {{ _('个人信息') }}
+            </a>
+          </li>
+          <li class="menu__seperator"></li>
+          <li class="menu__item">
+            <a href="{{ reverse_url('logout') }}" class="menu__link" name="nav_logout">
+              <span class="icon icon-logout"></span> {{ _('登出') }}
+            </a>
+          </li>
+        </ol>
+      </li>
+      {% if handler.num_unread == 0 %}
+        <li class="nav__list-item"><a href="{{ reverse_url('user_message') }}?unread_only=1" class="nav__item" name="nav_message">{{ _('没有未读消息').format(handler.num_unread) }}</a></li>
+      {% else %}
+        <li class="nav__list-item"><a href="{{ reverse_url('user_message') }}?unread_only=1" class="nav__item alert" name="nav_message">{{ _('{} 条未读消息').format(handler.num_unread) }}</a></li>
+      {% endif %}
+    {% endif %}
+    </ol>
+  </div></div>
+</nav>
+<nav class="nav--shadow"></nav>

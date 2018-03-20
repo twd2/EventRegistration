@@ -1,0 +1,37 @@
+.register__teammates
+  margin: 0 !important
+  padding: 0 !important
+  list-style: none !important
+  font-size: 0
+
+.register__teammate
+  display: inline-block
+  vertical-align: top
+  height: rem($table-lh)
+  margin: rem(0 2px 2px 0) !important
+  padding: 0 !important
+
+.register__teammate-link
+  display: inline-block
+  padding: rem(0 7px)
+  overflow: hidden
+  text-overflow: ellipsis
+  white-space: nowrap
+  max-width: rem(130px)
+  line-height: rem($table-lh)
+  height: rem($table-lh)
+  background: #F0F0F0
+  color: $text-1-color !important
+  font-size: rem($font-size-small)
+
+  &:hover
+    background: $primary-color
+    color: #FFF !important
+    text-decoration: none
+
+.col--register-name
+  .register__teammates
+    float: right
+
+  .register__teammate
+    margin: rem(0 2px 0 0) !important

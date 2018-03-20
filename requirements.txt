@@ -1,0 +1,14 @@
+accept
+aiohttp>=2.0.7
+jinja2>=2.9.0
+sockjs>=0.6.0
+hoedown
+git+https://github.com/LukeXuan/aiosmtplib # custom aiosmtlib with ssl support
+pytz
+colorlog
+GitPython
+PyYAML
+git+https://github.com/iceb0y/aiomongo
+coverage
+qrcode
+pillow

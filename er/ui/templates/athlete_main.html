@@ -1,0 +1,70 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('名人列表')}}</h1>
+      </div>
+    {% if not ddocs %}
+      {{ nothing.render('没有名人...') }}
+    {% else %}
+      <ol class="section__list athlete__list">
+      {% for ddoc in ddocs %}
+        <li class="section__list__item athlete__item">
+          <div class="media">
+            <div class="media__left medium">
+              <div class="athlete__date numbox">
+                <div class="numbox__num large">{{ ddoc['year'] }}</div>
+                <div class="numbox__text"></div>
+              </div>
+            </div>
+            <div class="media__body medium">
+              <h1 class="athlete__name"><a href="{{ reverse_url('athlete_detail', did=ddoc['_id']) }}" data-emoji-enabled>{{ ddoc['name'] }}</a></h1>
+              <ul class="supplementary list">
+                <li>
+                  <span class="icon icon-preview"></span> {{ ddoc['num_view']|default(0) }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+      </ol>
+      {{ paginator.render(page, dpcount, add_qs=qs) }}
+    {% endif %}
+    </div>
+  </div>
+  <div class="medium-3 columns">
+    <div class="section side">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('这是什么？') }}</h1>
+      </div>
+      <div class="section__body typo">
+        <p>{{ _('这里会展示酒井名人的个人介绍。') }}</p>
+      </div>
+    </div>
+  </div>
+  {% if handler.has_role(er.model.builtin.ROLE_ADMIN) %}
+  <div class="medium-3 columns">
+    <div class="section side">
+      <div class="section__header">
+        <h1 class="section__title">
+          {{ _('创建') }}
+        </h1>
+      </div>
+      <ol class="menu">
+        <li class="menu__item"><a class="menu__link" href="{{ reverse_url('athlete_add') }}">
+          <span class="icon icon-add"></span>  {{ _('创建') }}
+        </a></li>
+      </ol>
+      <div class="section__body">
+        <div class="typo supplementary">
+          <p>{{ _('您有权限创建酒井名人。') }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__body">
+        <form method="post">
+          <div class="row">
+            {{ form.form_text(columns=8, label='赛事名称', name='name', value=edoc['name']|default(''), autofocus=True, row=False, required=True) }}
+          </div>
+          <div class="row">
+            {{ form.form_text(columns=6, label='报名开始日期', name='begin_at_date', placeholder='YYYY-mm-dd', value=begin_date_text, date=True, row=False, required=True) }}
+            {{ form.form_text(columns=6, label='报名开始时间', name='begin_at_time', placeholder='HH:MM', value=begin_time_text, time=True, row=False, required=True) }}
+          </div>
+          <div class="row">
+            {{ form.form_text(columns=6, label='报名结束日期', name='end_at_date', placeholder='YYYY-mm-dd', value=end_date_text, date=True, row=False, required=True) }}
+            {{ form.form_text(columns=6, label='报名结束时间', name='end_at_time', placeholder='HH:MM', value=end_time_text, time=True, row=False, required=True) }}
+          </div>
+          <div class="row">
+            {{ form.form_text(columns=6, label='比赛地点', name='place', value=edoc['place']|default(''), row=False, required=True) }}
+            {{ form.form_text(columns=6, label='比赛时间', name='time', value=edoc['time']|default(''), row=False, required=True) }}
+          </div>
+          {{ form.form_textarea(columns=None, label='赛事简介', name='intro', value=edoc['intro']|default(''), markdown=True, required=True) }}
+          {{ form.form_checkbox(columns=None, label='公布参赛人员名单', name='show_list', value=edoc['show_list']) }}
+          <input type="hidden" name="tags" value="{{ tags_text }}">
+          <div class="row">
+            {{ form.form_text(columns=4, label='标签', id='tag', autocomplete='off', row=False) }}
+            <label>
+              <br>
+              <button type="button" class="rounded primary button" id="tag_add">
+                {{ _('添加') }}
+              </button>
+            </label>
+          </div>
+          <ul class="event__tags">
+          </ul>
+          <input type="hidden" name="fields" value="{{ fields_text }}">
+          <div class="row">
+            {{ form.form_text(columns=4, label='附加信息', id='field', autocomplete='off', row=False) }}
+            <label>
+              <br>
+              <button type="button" class="rounded primary button" id="field_add">
+                {{ _('添加') }}
+              </button>
+            </label>
+          </div>
+          <ul class="event__fields">
+          </ul>
+          {{ form.form_text(columns=None, label='报名数限制', name='register_limit', value=edoc['register_limit']|default(50000), type='number', required=True, min=0) }}
+          {{ form.form_checkbox(columns=None, label='这是团体赛事', name='is_group', value=edoc['is_group']) }}
+          <div class="row" id="member_limit">
+            {{ form.form_text(columns=6, label='每组人数下限', name='member_lb', value=edoc['member_lb']|default(1), type='number', row=False, required=True, min=1) }}
+            {{ form.form_text(columns=6, label='每组人数上限', name='member_ub', value=edoc['member_ub']|default(1), type='number', row=False, required=True, min=1) }}
+          </div>
+          <div class="row"><div class="columns">
+            <input type="hidden" name="csrf_token" value="{{ handler.csrf_token }}">
+          {% if page_name == 'event_edit' %}
+            <button type="submit" class="rounded primary button">
+              {{ _('更新') }}
+            </button>
+          {% else %}
+            <button type="submit" class="rounded primary button">
+              {{ _('创建') }}
+            </button>
+          {% endif %}
+            <button type="button" class="rounded button" onclick="window.history.go(-1)">
+              {{ _('取消') }}
+            </button>
+          </div></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="medium-3 columns">
+    {% include 'components/md_hint.html' %}
+  </div>
+</div>
+{% endblock %}

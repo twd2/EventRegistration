@@ -1,0 +1,74 @@
+{% extends "layout/manage_base.html" %}
+{% block manage_content %}
+<div class="section">
+  <div class="section__header">
+    <h1 class="section__title">{{ _('管理员设置') }}</h1>
+  </div>
+  <div class="section__body typo">
+    <form method="POST">
+      <input type="hidden" name="operation" value="add">
+      <input type="hidden" name="csrf_token" value="{{ handler.csrf_token }}">
+      <div class="row">
+        <div class="medium-6 columns">
+          <label>
+            {{ _('用户名或姓名') }}
+            <input name="username" type="text" class="textbox" autocomplete="off" data-autofocus>
+          </label>
+        </div>
+        <div class="medium-6 columns">
+          <label>
+            <br>
+            <input type="submit" value="{{ _('添加管理员') }}" class="rounded primary button">
+          </label>
+        </div>
+      </div>
+    </form>
+  </div>
+  {{ noscript_note.render() }}
+  <div class="section__body no-padding users">
+    <table class="data-table">
+      <colgroup>
+        <col class="col--checkbox">
+        <col class="col--uid">
+        <col class="col--user">
+        <col class="col--name">
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="col--checkbox">
+            <label class="compact checkbox">
+              <input type="checkbox" name="select_all" data-checkbox-toggle="user">
+            </label>
+          </th>
+          <th class="col--uid">{{ _('用户 ID') }}</th>
+          <th class="col--user">{{ _('用户名') }}</th>
+          <th class="col--name">{{ _('姓名') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for udoc in udocs %}
+        <tr data-uid="{{ udoc['_id'] }}">
+          <td class="col--checkbox">
+            <label class="compact checkbox">
+              <input type="checkbox" data-checkbox-group="user" data-checkbox-range>
+            </label>
+          </td>
+          <td class="col--uid">
+            {{ udoc['_id'] }}
+          </td>
+          <td class="col--user">
+            {{ udoc['username'] }}
+          </td>
+          <td class="col--name">
+            {{ udoc['name'] }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <div class="section__body">
+    <button class="rounded button" name="remove_selected">{{ _('删除所选用户的管理员权限') }}</button>
+  </div>
+</div>
+{% endblock %}

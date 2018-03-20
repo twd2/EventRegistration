@@ -1,0 +1,16 @@
+<div class="section__body">
+  {{ form.form_textarea(columns=None, label='审核意见', name='reply', markdown=True) }}
+  <div class="row">
+    <div class="columns">
+      {{ _('选择') }}:
+      <select class="inline compact select" name="status">
+        <option value="2">{{ _('审核通过') }}</option>
+        <option value="1">{{ _('审核不通过') }}</option>
+      </select>
+      <input type="hidden" name="csrf_token" value="{{ handler.csrf_token }}">
+      <button type="submit" class="rounded primary button">
+        {{ _('确认') }}
+      </button>
+    </div>
+  </div>
+</div>

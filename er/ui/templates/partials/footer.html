@@ -1,0 +1,23 @@
+<div class="footer">
+  <div class="row"><div class="columns">
+    <div class="footer__extra-link clearfix">
+      <div class="footer__extra-left">
+        <ol class="clearfix">
+          <li class="footer__extra-link-item" data-dropdown-target="#menu-footer-lang">
+            <span><span class="icon icon-global"></span> Language <span class="icon icon-expand_less"></span></span>
+            <ol class="dropdown-target menu" id="menu-footer-lang">
+              <li class="menu__item"><a class="menu__link" href="#">简体中文</a></li>
+            </ol>
+          </li>
+        </ol>
+      </div>
+      <div class="footer__extra-right">
+        <ol class="clearfix">
+        {% for html in er.model.builtin.FOOTER_EXTRA_HTMLS %}
+          <li class="footer__extra-link-item">{{ html|safe }}</li>
+        {% endfor %}
+        </ol>
+      </div>
+    </div>
+  </div></div>
+</div>

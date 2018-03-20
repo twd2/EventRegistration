@@ -1,0 +1,50 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <form action="" method="post">
+      <div class="section">
+        <div class="section__header">
+          <h1 class="section__title">{{ _('选择字段') }}</h1>
+        </div>
+        <div class="section__body no-padding">
+          <table class="data-table">
+            <colgroup>
+              <col class="col--checkbox">
+              <col class="col--field">
+            </colgroup>
+            <thead>
+              <tr>
+                <th class="col--checkbox">
+                  <label class="compact checkbox">
+                    <input type="checkbox" data-checkbox-toggle="field">
+                  </label>
+                </th>
+                <th class="col--field">{{ _('字段') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for title in row_title %}
+              <tr>
+                <td class="col--checkbox">
+                  <label class="compact checkbox">
+                    <input name="field" value="{{ loop.index }}" type="checkbox" data-checkbox-group="field" data-checkbox-range>
+                  </label>
+                </td>
+                <td class="col--field">{{ _(title) }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="section__body">
+          <input type="hidden" name="csrf_token" value="{{ handler.csrf_token }}">
+          <button type="submit" class="rounded primary button">
+            {{ _('导出为CSV') }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

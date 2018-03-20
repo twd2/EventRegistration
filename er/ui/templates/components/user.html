@@ -1,0 +1,8 @@
+{% macro render_inline(udoc, avatar=true) %}
+<span class="user-profile-link">
+{% if avatar %}
+  <img class="small user-profile-avatar v-center" src="{{ udoc['mail']|default('')|gravatar_url }}" width="20" height="20">
+{% endif %}
+  <span class="user-profile-name">{{ udoc['username']|default('') }}</span>
+</span>
+{% endmacro %}

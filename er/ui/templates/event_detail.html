@@ -1,0 +1,213 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('赛事简介') }}</h1>
+      </div>
+      <div class="section__body typo">
+        {{ edoc['intro']|markdown }}
+        <dl class="large horizontal">
+          <dt>{{ _('比赛地点') }}</dt><dd>{{ edoc['place'] }}</dd>
+          <dt>{{ _('比赛时间') }}</dt><dd>{{ edoc['time'] }}</dd>
+        </dl>
+      </div>
+    </div>
+    {% if rdocs_approved %}
+    <div class="section">
+      <div class="section__header clearfix">
+        <div class="float-left">
+          <h1 class="section__title">{{ _('参赛人员') }}</h1>
+        </div>
+      </div>
+      <div class="section__body no-padding">
+        <table class="data-table">
+          <colgroup>
+            <col class="col--username">
+            <col class="col--name">
+            <col class="col--datetime">
+          </colgroup>
+          <thead>
+            <tr>
+              <th class="col--username">{{ _('用户名') }}</th>
+              <th class="col--name">{{ _('姓名') }}</th>
+              <th class="col--datetime">{{ _('报名时间') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for rdoc in rdocs_approved %}
+            <tr data-rid="{{ rdoc['_id'] }}">
+              <td class="col--username">{{ user.render_inline(udict_approved[rdoc['creator_id']]) }}</td>
+              <td class="col--name">{{ udict_approved[rdoc['creator_id']]['name'] }}</td>
+              <td class="col--datetime">{{ datetime_span(rdoc['_id'].generation_time) }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {{ paginator.render(page_approved, rpcount_approved, add_qs=qs_approved, page_key='page_approved') }}
+      </div>
+    </div>
+    {% endif %}
+    {% if result_rdocs %}
+    <div class="section">
+      <div class="section__header clearfix">
+        <div class="float-left">
+          <h1 class="section__title">{{ _('比赛结果') }}</h1>
+        </div>
+      </div>
+      <div class="section__body no-padding">
+        <table class="data-table">
+          <colgroup>
+            <col class="col--rank">
+            <col class="col--username">
+            <col class="col--name">
+            <col class="col--result">
+          </colgroup>
+          <thead>
+            <tr>
+              <th class="col--rank">{{ _('名次') }}</th>
+              <th class="col--username">{{ _('用户名') }}</th>
+              <th class="col--name">{{ _('姓名') }}</th>
+              <th class="col--result">{{ _('成绩') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for rdoc in result_rdocs %}
+            <tr>
+              <td class="col--rank">{{ rdoc['rank'] }}</td>
+              <td class="col--username">{{ user.render_inline(result_udict[rdoc['creator_id']]) }}</td>
+              <td class="col--name">{{ result_udict[rdoc['creator_id']]['name'] }}</td>
+              <td class="col--result">{{ rdoc['result'] }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    {% endif %}
+    {% if not handler.has_role(er.model.builtin.ROLE_USER, require_enable=False) %}
+    <div class="section">
+      <div class="section__body typo">
+        <blockquote class="warn">
+          {{ _('请登录后报名。前往 {} 登录。').format('<a href="{}">{}</a>'.format(reverse_url('login_with_return_eid', return_eid=edoc['_id']), _('这里')))|safe }}
+        </blockquote>
+      </div>
+    </div>
+    {% elif not handler.has_role(er.model.builtin.ROLE_USER, require_enable=True) %}
+    <div class="section">
+      <div class="section__body typo">
+        <blockquote class="warn">
+          {{ _('您的账号还未激活，请激活后报名。前往 {} 激活。').format('<a href="{}?return_eid={}">{}</a>'.format(reverse_url('user_info'), edoc['_id'], _('这里')))|safe }}
+        </blockquote>
+      </div>
+    </div>
+    {% elif rdoc %}
+    {% with udoc=handler.user %}
+    {% include "partials/register_result.html" %}
+    {% include "partials/register_detail.html" %}
+    {% endwith %}
+    {% elif handler.now >= edoc['end_at'] %}
+    <div class="section">
+      <div class="section__body typo">
+        <blockquote class="warn">
+          {{ _('该赛事报名已截止。') }}
+        </blockquote>
+      </div>
+    </div>
+    {% elif edoc['begin_at'] > handler.now %}
+    <div class="section">
+      <div class="section__body typo">
+        <blockquote class="warn">
+          {{ _('该赛事报名未开始。') }}
+        </blockquote>
+      </div>
+    </div>
+    {% elif edoc['num_register'] < edoc['register_limit'] %}
+    {% with udoc=handler.user %}
+    {% include "partials/register_edit.html" %}
+    {% endwith %}
+    {% else %}
+    <div class="section">
+      <div class="section__body typo">
+        <blockquote class="warn">
+          {{ _('该赛事报名数已满。') }}
+        </blockquote>
+      </div>
+    </div>
+    {% endif %}
+    {% if handler.has_role(er.model.builtin.ROLE_ADMIN) %}
+    <form action="{{ reverse_url('register_review') }}" method="post">
+      <div class="section">
+        <div class="section__header clearfix">
+          <div class="float-left">
+            <h1 class="section__title">{{ _('所有报名') }}</h1>
+          </div>
+          <div class="float-right">
+            <a class="button" href="{{ reverse_url('event_register_download', eid=edoc['_id']) }}">
+              <span class="icon icon-download"></span> {{ _('导出为CSV') }}
+            </a>
+            <a class="button" href="{{ reverse_url('event_register_download_advanced', eid=edoc['_id']) }}">
+              <span class="icon icon-download"></span> {{ _('高级') }}
+            </a>
+          </div>
+        </div>
+        <div class="section__body no-padding">
+          <table class="data-table">
+            <colgroup>
+              <col class="col--checkbox">
+              <col class="col--username">
+              <col class="col--name">
+              <col class="col--datetime">
+              <col class="col--status">
+              <col class="col--more">
+            </colgroup>
+            <thead>
+              <tr>
+                <th class="col--checkbox">
+                  <label class="compact checkbox">
+                    <input type="checkbox" data-checkbox-toggle="registration">
+                  </label>
+                </th>
+                <th class="col--username">{{ _('用户名') }}</th>
+                <th class="col--name">{{ _('姓名') }}</th>
+                <th class="col--datetime">{{ _('报名时间') }}</th>
+                <th class="col--status">{{ _('状态') }}</th>
+                <th class="col--more">{{ _('更多操作') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for rdoc in rdocs %}
+              <tr data-rid="{{ rdoc['_id'] }}">
+                <td class="col--checkbox">
+                  <label class="compact checkbox">
+                    <input name="rid" value="{{ rdoc['_id'] }}" type="checkbox" data-checkbox-group="registration" data-checkbox-range>
+                  </label>
+                </td>
+                <td class="col--username">{{ user.render_inline(udict[rdoc['creator_id']]) }}</td>
+                <td class="col--name">{{ udict[rdoc['creator_id']]['name'] }}</td>
+                <td class="col--datetime">{{ datetime_span(rdoc['_id'].generation_time) }}</td>
+                <td class="col--status">{{ _(er.model.registration.STATUS_TEXTS[rdoc['status']]) }}</td>
+                <td class="col--more"><a class="typo-a" href="{{ reverse_url('register_detail', rid=rdoc['_id']) }}">{{ _('更多操作') }}</a></td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+          {{ paginator.render(page, rpcount, add_qs=qs) }}
+        </div>
+        <div class="section__header">
+          <h1 class="section__title">{{ _('批量审核') }}</h1>
+        </div>
+        {% include "partials/review_form.html" %}
+      </div>
+    </form>
+    {% endif %}
+  </div>
+
+  <div class="medium-3 columns">
+    {% with edoc=edoc, owner_udoc=owner_udoc %}
+      {% include "partials/event_sidebar.html" %}
+    {% endwith %}
+  </div>
+</div>
+{% endblock %}

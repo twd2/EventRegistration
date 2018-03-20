@@ -1,0 +1,32 @@
+<ol class="section__list registration__list">
+{% for rdoc in rdocs %}
+  <li class="section__list__item registration__item">
+    <div class="media">
+      <div class="media__left medium">
+        <div class="registration__date numbox">
+          <div class="numbox__num large">{{ datetime_span(rdoc['_id'].generation_time, false, '%d') }}</div>
+          <div class="numbox__text">{{ datetime_span(rdoc['_id'].generation_time, false, '%Y-%m') }}</div>
+        </div>
+      </div>
+      <div class="media__body medium">
+        <h1 class="registration__name"><a href="{{ reverse_url('register_detail', rid=rdoc['_id']) }}" data-emoji-enabled>{{ edict[rdoc['event_id']]['name'] }}</a></h1>
+        <ul class="supplementary list">
+          <li>
+          {% if rdoc['status'] == er.model.registration.STATUS_PENDING %}
+            <span class="pending"><span class="icon icon-schedule"></span> {{ _(er.model.registration.STATUS_TEXTS[rdoc['status']]) }}</span>
+          {% elif rdoc['status'] == er.model.registration.STATUS_APPROVED %}
+            <span class="approved"><span class="icon icon-check"></span> {{ _(er.model.registration.STATUS_TEXTS[rdoc['status']]) }}</span>
+          {% else %}
+            <span class="rejected"><span class="icon icon-close"></span> {{ _(er.model.registration.STATUS_TEXTS[rdoc['status']]) }}</span>
+          {% endif %}
+          </li>
+          {% if rdoc['result'] %}
+          <li class="section__title">{{ _('名次') }}: {{ rdoc['rank'] }}</li>
+          <li class="section__title">{{ _('成绩') }}: {{ rdoc['result'] }}</li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </li>
+{% endfor %}
+</ol>

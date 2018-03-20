@@ -1,0 +1,56 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__body">
+        <form method="post">
+          <div class="row">
+            {{ form.form_text(columns=8, label='姓名', name='name', value=ddoc['name']|default(''), autofocus=True, row=False, required=True) }}
+            {{ form.form_text(columns=4, label='入选年份', name='year', value=ddoc['year']|default(handler.now.year), row=False, required=True) }}
+          </div>
+          <div class="row">
+            {{ form.form_text(columns=4, label='性别', name='gender', value=ddoc['gender']|default(''), row=False, required=True) }}
+            {{ form.form_text(columns=4, label='级数', name='grade', value=ddoc['grade']|default(''), row=False, required=True) }}
+            {{ form.form_text(columns=4, label='班级', name='class', value=ddoc['class']|default(''), row=False, required=True) }}
+          </div>
+          {{ form.form_text(columns=12, label='主要项目', name='subject', value=ddoc['subject']|default(''), required=True) }}
+          {{ form.form_text(columns=12, label='访谈记录链接', name='link', value=ddoc['link']|default('https://')) }}
+          {{ form.form_textarea(columns=None, label='个人简介', name='bio', value=ddoc['bio']|default(''), markdown=True, required=True) }}
+          {{ form.form_textarea(columns=None, label='个人荣誉', name='honor', value=ddoc['honor']|default(''), markdown=True, required=True) }}
+          <input type="hidden" name="images_text" value="{{ ddoc['images_text']|default('') }}">
+          <div class="row">
+            {{ form.form_text(columns=6, label='个人风采图片', id='images', autocomplete='off', row=False) }}
+            <label>
+              <br>
+              <button type="button" class="rounded primary button" id="images_add">
+                {{ _('添加') }}
+              </button>
+            </label>
+          </div>
+          <ul class="event__tags">
+          </ul>
+          <div class="row"><div class="columns">
+            <input type="hidden" name="csrf_token" value="{{ handler.csrf_token }}">
+          {% if page_name == 'athlete_edit' %}
+            <button type="submit" class="rounded primary button">
+              {{ _('更新') }}
+            </button>
+          {% else %}
+            <button type="submit" class="rounded primary button">
+              {{ _('创建') }}
+            </button>
+          {% endif %}
+            <button type="button" class="rounded button" onclick="window.history.go(-1)">
+              {{ _('取消') }}
+            </button>
+          </div></div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="medium-3 columns">
+    {% include 'components/md_hint.html' %}
+  </div>
+</div>
+{% endblock %}

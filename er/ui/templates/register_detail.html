@@ -1,0 +1,44 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    {% include "partials/register_result.html" %}
+    {% include "partials/register_detail.html" %}
+    {% if handler.has_role(er.model.builtin.ROLE_ADMIN) %}
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('设置成绩') }}</h1>
+      </div>
+      <div class="section__body">
+        <form action="" method="post">
+          <div class="row">
+            {{ form.form_text(columns=6, label='成绩', name='result', value=rdoc['result'], row=False) }}
+            {{ form.form_text(columns=6, label='名次', name='rank', value=rdoc['rank'], type='number', row=False, required=True, min=0) }}
+          </div>
+          <div class="row"><div class="columns">
+            <input type="hidden" name="csrf_token" value="{{ handler.csrf_token }}">
+            <button type="submit" class="rounded primary button">
+              {{ _('提交') }}
+            </button>
+          </div></div>
+        </form>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('审核') }}</h1>
+      </div>
+      <form action="{{ reverse_url('register_review') }}" method="post">
+        <input type="hidden" name="rid" value="{{ rdoc['_id'] }}">
+        {% include "partials/review_form.html" %}
+      </form>
+    </div>
+    {% endif %}
+  </div>
+  <div class="medium-3 columns">
+    {% with edoc=edoc, owner_udoc=owner_udoc %}
+      {% include "partials/event_sidebar.html" %}
+    {% endwith %}
+  </div>
+</div>
+{% endblock %}

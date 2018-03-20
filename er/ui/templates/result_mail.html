@@ -1,0 +1,13 @@
+{% extends "layout/mail.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+{% if status == er.model.registration.STATUS_APPROVED %}
+<p>{{ _('您于 {} 报名的比赛 {} 已通过审核！').format(datetime_span(rdoc['_id'].generation_time, false, '%Y-%m-%d %H:%M'), edoc['name'])|safe }} </p>
+{% else %}
+<p>{{ _('您于 {} 报名的比赛 {} 未通过审核。').format(datetime_span(rdoc['_id'].generation_time, false, '%Y-%m-%d %H:%M'), edoc['name'])|safe }}</p>
+{% endif %}
+{% if reply %}
+<p>{{ _('管理员回复：') }}</p>
+<p>{{ reply|markdown }}</p>
+{% endif %}
+{% endblock %}

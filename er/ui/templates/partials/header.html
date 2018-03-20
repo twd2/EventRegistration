@@ -1,0 +1,6 @@
+<div class="header{% if no_path_section %} mini{% endif %}">
+  <div class="header__content"><div class="row"><div class="columns">
+    <div class="header__logo--domain"><a href="{{ reverse_url('main') }}" target="_self">{{ _('赛事报名') }}</a></div>
+  </div></div></div>
+  {% include "partials/path.html" %}
+</div>

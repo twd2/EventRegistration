@@ -1,0 +1,123 @@
+{% set no_path_section = true %}
+{% extends "layout/basic.html" %}
+{% macro render_important_event(view, edoc, rdoc) %}
+<div class="section immersive--content section--event {{ view }}">
+  <div class="media">
+    <div class="media__body middle">
+      <div class="section__body">
+        <div><h2 class="status_title">
+        {% if handler.now < edoc['begin_at'] %}
+          {{ _('报名即将开始') }}
+        {% elif edoc['begin_at'] <= handler.now < edoc['end_at'] %}
+          {{ _('正在报名') }}
+        {% else %}
+          {{ _('报名已经截止') }}
+        {% endif %}
+        </h2></div>
+        <h1>{{ edoc['name'] }}</h1>
+        <ul class="info">
+          <li>
+            <span class="icon icon-calendar"></span>
+            {{ datetime_span(edoc['begin_at']) }} {{ _('开始报名') }}
+          </li>
+          <br>
+          <li>
+            <span class="icon icon-calendar"></span>
+            {{ datetime_span(edoc['end_at']) }} {{ _('结束报名') }}
+          </li>
+          <br>
+          <li>
+            <span class="icon icon-user--multiple"></span>
+            {{ _('报名人数') }}: {{ edoc['num_register'] }}
+          </li>
+          <li>
+            <span class="icon icon-preview"></span>
+            {{ _('查看次数') }}: {{ edoc['num_view'] }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="media__right middle">
+      <div class="section__body">
+        <a href="{{ reverse_url('event_detail', eid=edoc['_id']) }}" class="detail-button">{{ _('查看详情') }}</a>
+        <div class="typo text-center">
+        {% if rdoc %}
+          <p><span class="icon icon-check"></span> {{ _('已报名') }}</p>
+        {% else %}
+          <p><span class="icon icon-schedule"></span> {{ _('未报名') }}</p>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endmacro %}
+{% block content %}
+<div class="mobile-hide" style="display: block;margin-bottom: 1.875rem;text-align: center">
+  <iframe id="frame" src="{{ reverse_url('slider') }}" scrolling="no" frameborder="0" style="width: 83%;padding: 0 !important;"></iframe>
+</div>
+<div class="row">
+  <div class="large-12 columns">
+    {% if handler.has_role(er.model.builtin.ROLE_USER, require_enable=False) %}
+    <div class="section">
+      <div class="section__body typo">
+        <p>{{ _('您好，') }}{{ user.render_inline(handler.user) }}!</p>
+        {% if not handler.is_enabled() %}
+        <blockquote class="warn">
+          {{ _('您的账号还未激活，部分功能不可用。前往 {} 激活。').format('<a href="{}">{}</a>'.format(reverse_url('user_info'), _('这里')))|safe }}
+        </blockquote>
+        {% else %}
+          <p>{{ _('您可以在 {} 中打开相应的赛事来报名。').format('<a href="{}">{}</a>'.format(reverse_url('event_main'), _('赛事列表')))|safe }}</p>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+<div class="row">
+  <div class="medium-12 columns">
+    <div class="section">
+    {% if latest_edocs %}
+      <div class="section__header">
+        <h1 class="section__title">{{ _('近期赛事')}}</h1>
+      </div>
+      <div class="media">
+      {% for i in range(0, latest_edocs|length) %}
+        <div class="medium-6 columns">
+          {{ render_important_event('blue', latest_edocs[i], latest_rdocs[i]) }}
+        </div>
+      {% endfor %}
+      </div>
+    {% endif %}
+    {% if hottest_edocs %}
+      <div class="section__header">
+        <h1 class="section__title">{{ _('热门赛事')}}</h1>
+      </div>
+      <div class="media">
+      {% for i in range(0, hottest_edocs|length) %}
+        <div class="medium-6 columns">
+          {{ render_important_event('red', hottest_edocs[i], hottest_rdocs[i]) }}
+        </div>
+      {% endfor %}
+      </div>
+    {% endif %}
+    </div>
+  </div>
+</div>
+{% if handler.has_role(er.model.builtin.ROLE_USER) %}
+<div class="row">
+  <div class="large-12 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('最近报名') }}</h1>
+      </div>
+      {% if not rdocs %}
+        {{ nothing.render('没有报名...') }}
+      {% else %}
+        {% include "partials/registration_list.html" %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

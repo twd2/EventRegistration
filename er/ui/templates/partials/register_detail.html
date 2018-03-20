@@ -1,0 +1,80 @@
+<div class="section">
+  <div class="section__header clearfix">
+    <div class="float-left">
+      <h1 class="section__title">{{ _('{} 报名表').format(edoc['name']) }}</h1>
+    </div>
+    <div class="float-right">
+    {% if rdoc['status'] == er.model.registration.STATUS_PENDING %}
+      <h1 class="section__title pending"><span class="icon icon-schedule"></span> {{ _(er.model.registration.STATUS_TEXTS[rdoc['status']]) }}</h1>
+    {% elif rdoc['status'] == er.model.registration.STATUS_APPROVED %}
+      <h1 class="section__title approved"><span class="icon icon-check"></span> {{ _(er.model.registration.STATUS_TEXTS[rdoc['status']]) }}</h1>
+    {% else %}
+      <h1 class="section__title rejected"><span class="icon icon-close"></span> {{ _(er.model.registration.STATUS_TEXTS[rdoc['status']]) }}</h1>
+    {% endif %}
+    </div>
+  </div>
+  <div class="section__body typo">
+    {% if rdoc['status'] == er.model.registration.STATUS_APPROVED %}
+    <blockquote class="note">
+      {{ _('这个报名已通过审核，无法修改报名表。') }}
+    </blockquote>
+    {% elif rdoc['status'] == er.model.registration.STATUS_PENDING %}
+    {% if rdoc['creator_id'] == handler.user['_id'] %}
+    <blockquote class="note">
+      {{ _('管理员正在审核您的报名，请耐心等待。') }}
+    </blockquote>
+    {% endif %}
+    {% elif not edoc['begin_at'] <= handler.now < edoc['end_at'] %}
+    <blockquote class="warn">
+      {{ _('报名已截止，无法修改报名表。') }}
+    </blockquote>
+    {% elif rdoc['status'] == er.model.registration.STATUS_REJECTED %}
+    {% if rdoc['creator_id'] == handler.user['_id'] %}
+    <blockquote class="note">
+      <p>{{ _('很抱歉，您的报名未通过审核，现在报名还没有截止，您可以修改信息再次提交。') }}</p>
+      {% if rdoc['reply'] %}
+      <p>{{ _('管理员回复：') }}</p>
+      {{ rdoc['reply']|markdown }}
+      {% endif %}
+    </blockquote>
+    {% else %}
+    <blockquote class="note">
+      {% if rdoc['reply'] %}
+      <p>{{ _('管理员回复：') }}</p>
+      {{ rdoc['reply']|markdown }}
+      {% endif %}
+    </blockquote>
+    {% endif %}
+    {% endif %}
+    <dl class="large horizontal">
+      <dt>{{ _('用户') }}</dt><dd>{{ user.render_inline(udoc) }}</dd>
+      <dt>{{ _('姓名') }}</dt><dd>{{ udoc['name'] }}</dd>
+      <dt>{{ _('电子邮箱') }}</dt><dd>{{ udoc['mail'] }}</dd>
+      {% for f in er.model.user.FIELDS.values() %}
+      <dt>{{ _(f.name) }}</dt><dd>{{ udoc[f.key] }}</dd>
+      {% endfor %}
+      {% for field in fields %}
+      <dt>{{ field['name'] }}</dt><dd>{{ field['value'] }}</dd>
+      {% endfor %}
+      {% if edoc['is_group'] %}
+      <dt>{{ _('队长')}}</dt><dd>{{ user.render_inline(team_leader_udoc) }}</dd>
+      <dt>{{ _('队员')}}</dt><dd>{{ teammates }}</dd>
+      {% endif %}
+    </dl>
+  {% if rdoc['status'] != er.model.registration.STATUS_APPROVED and edoc['begin_at'] <= handler.now < edoc['end_at'] %}
+    <p>
+      <form action="{{ reverse_url('register_delete', rid=rdoc['_id']) }}" method="POST">
+        <div class="row"><div class="columns">
+          <a href="{{ reverse_url('register_edit', rid=rdoc['_id']) }}" class="rounded primary button">
+          {{ _('修改') }}
+          </a>
+          <input type="hidden" name="csrf_token" value="{{ handler.csrf_token }}">
+          <button class="rounded button" type="submit" id="remove_selected">
+            {{ _('取消报名') }}
+          </button>
+        </div></div>
+      </form>
+    </p>
+  {% endif %}
+  </div>
+</div>

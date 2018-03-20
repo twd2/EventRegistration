@@ -1,0 +1,64 @@
+{% extends "layout/basic.html" %}
+{% block content %}
+<div class="row">
+  <div class="medium-9 columns">
+    <div class="section">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('队伍列表')}}</h1>
+      </div>
+    {% if not ddocs %}
+      {{ nothing.render('没有队伍...') }}
+    {% else %}
+      <ol class="section__list team__list">
+      {% for ddoc in ddocs %}
+        <li class="section__list__item team__item">
+          <div class="media">
+            <div class="media__body medium">
+              <h1 class="team__name"><a href="{{ reverse_url('team_detail', did=ddoc['_id']) }}" data-emoji-enabled>{{ ddoc['name'] }}</a></h1>
+              <ul class="supplementary list">
+                <li>
+                  <span class="icon icon-preview"></span> {{ ddoc['num_view']|default(0) }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+      </ol>
+      {{ paginator.render(page, dpcount, add_qs=qs) }}
+    {% endif %}
+    </div>
+  </div>
+  <div class="medium-3 columns">
+    <div class="section side">
+      <div class="section__header">
+        <h1 class="section__title">{{ _('这是什么？') }}</h1>
+      </div>
+      <div class="section__body typo">
+        <p>{{ _('这里会展示系代表队的介绍。') }}</p>
+      </div>
+    </div>
+  </div>
+  {% if handler.has_role(er.model.builtin.ROLE_ADMIN) %}
+  <div class="medium-3 columns">
+    <div class="section side">
+      <div class="section__header">
+        <h1 class="section__title">
+          {{ _('创建') }}
+        </h1>
+      </div>
+      <ol class="menu">
+        <li class="menu__item"><a class="menu__link" href="{{ reverse_url('team_add') }}">
+          <span class="icon icon-add"></span>  {{ _('创建') }}
+        </a></li>
+      </ol>
+      <div class="section__body">
+        <div class="typo supplementary">
+          <p>{{ _('您有权限创建队伍介绍。') }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

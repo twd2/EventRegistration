@@ -1,0 +1,5 @@
+{% extends "layout/mail.html" %}
+{% block title %}{{ page_title }}{% endblock %}
+{% block content %}
+{{ content|markdown }}
+{% endblock %}
