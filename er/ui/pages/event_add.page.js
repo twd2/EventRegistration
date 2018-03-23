@@ -12,7 +12,7 @@ const page = new NamedPage('event_add', () => {
   var item, items;
 
   function getTags(val) {
-    return ['田径', '游泳', '球类', '马约翰杯', '酒井杯', '2017', '2018'];
+    return ['田径', '游泳', '球类', '马约翰杯', '酒井杯', '2018', '2019', '2020', '2021'];
   }
 
   function getFields(val) {
