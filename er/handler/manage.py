@@ -43,25 +43,6 @@ class ManageAdminHandler(base.OperationHandler):
     self.json_or_redirect(self.referer_or_main)
 
 
-@app.route('/manage/su', 'manage_su')
-class ManageSUHandler(base.Handler):
-  @base.require_role(builtin.ROLE_ROOT)
-  async def get(self):
-    self.render('manage_su.html')
-
-  @base.require_role(builtin.ROLE_ROOT)
-  @base.post_argument
-  @base.require_csrf_token
-  @base.sanitize
-  async def post(self, *, username: str):
-    udoc = await user.init(username)
-    await self.update_session(uid=udoc['_id'])
-    if udoc['enable_at']:
-      self.json_or_redirect(self.reverse_url('main'))
-    else:
-      self.json_or_redirect(self.reverse_url('user_info'))
-
-
 @app.route('/manage/message', 'manage_message')
 class ManageMessageHandler(base.Handler):
   @base.require_role(builtin.ROLE_ADMIN)
