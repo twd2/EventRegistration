@@ -4,6 +4,7 @@ from er.model import builtin
 from er.model import event
 from er.model import registration
 from er.handler import base
+from er.service import staticmanifest
 from er.util import pagination
 
 
@@ -36,4 +37,11 @@ class MainHandler(base.Handler):
 @app.route('/slider', 'slider')
 class SliderHandler(base.Handler):
   async def get(self):
-    self.render('slider.html')
+    def static_url(s):
+      return '/' + staticmanifest.get(s)
+    images = [static_url('main/1.jpg'),
+              static_url('main/2.jpg'),
+              static_url('main/3.jpg'),
+              static_url('main/2.jpg'),
+              static_url('main/1.jpg')]
+    self.render('slider.html', images=images)

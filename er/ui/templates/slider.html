@@ -21,28 +21,18 @@
 </head>
 <body>
 <div id="wrap">
+{% for url in images %}
 <div class="banner">
     <div class="banner-img">
-        <img src="{{ static_url("main/1.jpg") }}" width="100%" alt="轮播图1">
+        <img src="{{ url }}" width="100%" alt="轮播图">
     </div>
 </div>
-
-<div class="banner">
-    <div class="banner-img">
-        <img src="{{ static_url("main/2.jpg") }}" width="100%" alt="轮播图1">
-    </div>
-</div>
-
-<div class="banner">
-    <div class="banner-img">
-        <img src="{{ static_url("main/3.jpg") }}" width="100%" alt="轮播图1">
-    </div>
-</div>
+{% endfor %}
 
 <div class="tab">
+{% for url in images %}
     <span></span>
-    <span></span>
-    <span></span>
+{% endfor %}
 </div>
 
 <div class="prev">
@@ -80,7 +70,7 @@ oNext.onclick = function(){//按下图片切换到后一张
       aBanner[j].style.opacity = "0";
       j++;
       num++;
-      if(j > 2){
+      if(j > {{ images|length - 1 }}){
       j = 0;
   }
       aSpan[j].className = "on";
@@ -98,7 +88,7 @@ aBanner[j].style.opacity = "1";
           j--;
           num--;
           if(j < 0){
-          j = 2;
+          j = {{ images|length - 1 }};
       }
           aSpan[j].className = "on";
   aBanner[j].style.opacity = "1";
@@ -110,7 +100,7 @@ aBanner[j].style.opacity = "1";
 
 function Time(){/*设置定时器运行的函数*/
 num++;
-if(num < 3){
+if(num < {{ images|length }}){
     for(var j = 0 ;j < aSpan.length; j++){
     aSpan[j].className = "";
     aBanner[j].style.opacity = "0";

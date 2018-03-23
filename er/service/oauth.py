@@ -6,7 +6,7 @@ from er.util import argmethod
 from er.util import options
 from er.util import json
 
-options.define('oauth_host', default='https://accounts.net9.org', help='OAuth server')
+options.define('oauth_host', default='https://accounts.net9.org:8443', help='OAuth server')
 options.define('oauth_id', default='', help='OAuth client id')
 options.define('oauth_secret', default='', help='OAuth client secret')
 
