@@ -41,7 +41,5 @@ class SliderHandler(base.Handler):
       return '/' + staticmanifest.get(s)
     images = [static_url('main/1.jpg'),
               static_url('main/2.jpg'),
-              static_url('main/3.jpg'),
-              static_url('main/2.jpg'),
-              static_url('main/1.jpg')]
+              static_url('main/3.jpg')]
     self.render('slider.html', images=images)

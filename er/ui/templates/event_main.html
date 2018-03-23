@@ -74,7 +74,7 @@
       </div>
       <div class="section__body">
         <label>
-          <input name="tag" type="text" class="textbox" value="{{ tag }}" autocomplete="off">
+          <input name="tag" type="text" class="textbox" value="{{ tag|default('') }}" autocomplete="off">
         </label>
         <button name="search" class="primary button">{{ _('搜索') }}</button>
       </div>

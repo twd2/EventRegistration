@@ -17,7 +17,7 @@
             {{ form.form_text(columns=8, label='电子邮箱', name='mail', placeholder='webmaster@example.org', value=handler.user['mail'] if handler.user['mail'] else default_udoc['mail'], row=False, type='email', required=True) }}
           </div>
           {% for f in er.model.user.FIELDS.values() %}
-          {{ form.form_text(columns=8, label=f.name, name=f.key, placeholder=_(f.name), value=handler.user[f.key] if handler.user[f.key] else default_udoc[f.key], required=f.length_min >= 1) }}
+          {{ form.form_text(columns=8, label=f.name, name=f.key, placeholder=_(f.name), value=(handler.user[f.key] if handler.user[f.key] else default_udoc[f.key])|default(''), required=f.length_min >= 1) }}
           {% endfor %}
           <div class="row"><div class="columns">
             <input type="hidden" name="csrf_token" value="{{ handler.csrf_token }}">

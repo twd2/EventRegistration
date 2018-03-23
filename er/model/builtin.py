@@ -25,4 +25,4 @@ USER_GUEST = {
 }
 
 # Footer extra HTMLs.
-FOOTER_EXTRA_HTMLS = ['© 2017 - 2019 <a href="http://mfmfmf.org/">mfmfmf</a>', version.get()]
+FOOTER_EXTRA_HTMLS = ['© 2017 - 2019 mfmfmf team', '<a href="https://github.com/twd2/EventRegistration" target="_blank">Fork me on GitHub</a>', version.get()]

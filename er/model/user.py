@@ -17,7 +17,7 @@ Field = functools.partial(
 
 FIELDS = [
   Field('student_id', '学号'),
-  Field('chinese_id', '证件号'),
+  Field('chinese_id', '证件号', length_min=0),
   Field('gender', '性别'),
   Field('birthday', '生日', oauth_map='birthdate', length_min=8, length_max=8),
   Field('degree', '攻读学位'),

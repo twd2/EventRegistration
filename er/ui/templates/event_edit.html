@@ -9,12 +9,12 @@
             {{ form.form_text(columns=8, label='赛事名称', name='name', value=edoc['name']|default(''), autofocus=True, row=False, required=True) }}
           </div>
           <div class="row">
-            {{ form.form_text(columns=6, label='报名开始日期', name='begin_at_date', placeholder='YYYY-mm-dd', value=begin_date_text, date=True, row=False, required=True) }}
-            {{ form.form_text(columns=6, label='报名开始时间', name='begin_at_time', placeholder='HH:MM', value=begin_time_text, time=True, row=False, required=True) }}
+            {{ form.form_text(columns=6, label='报名开始日期', name='begin_at_date', placeholder='YYYY-mm-dd', value=begin_date_text|default(''), date=True, row=False, required=True) }}
+            {{ form.form_text(columns=6, label='报名开始时间', name='begin_at_time', placeholder='HH:MM', value=begin_time_text|default(''), time=True, row=False, required=True) }}
           </div>
           <div class="row">
-            {{ form.form_text(columns=6, label='报名结束日期', name='end_at_date', placeholder='YYYY-mm-dd', value=end_date_text, date=True, row=False, required=True) }}
-            {{ form.form_text(columns=6, label='报名结束时间', name='end_at_time', placeholder='HH:MM', value=end_time_text, time=True, row=False, required=True) }}
+            {{ form.form_text(columns=6, label='报名结束日期', name='end_at_date', placeholder='YYYY-mm-dd', value=end_date_text|default(''), date=True, row=False, required=True) }}
+            {{ form.form_text(columns=6, label='报名结束时间', name='end_at_time', placeholder='HH:MM', value=end_time_text|default(''), time=True, row=False, required=True) }}
           </div>
           <div class="row">
             {{ form.form_text(columns=6, label='比赛地点', name='place', value=edoc['place']|default(''), row=False, required=True) }}
@@ -22,7 +22,7 @@
           </div>
           {{ form.form_textarea(columns=None, label='赛事简介', name='intro', value=edoc['intro']|default(''), markdown=True, required=True) }}
           {{ form.form_checkbox(columns=None, label='公布参赛人员名单', name='show_list', value=edoc['show_list']) }}
-          <input type="hidden" name="tags" value="{{ tags_text }}">
+          <input type="hidden" name="tags" value="{{ tags_text|default('') }}">
           <div class="row">
             {{ form.form_text(columns=4, label='标签', id='tag', autocomplete='off', row=False) }}
             <label>
@@ -34,7 +34,7 @@
           </div>
           <ul class="event__tags">
           </ul>
-          <input type="hidden" name="fields" value="{{ fields_text }}">
+          <input type="hidden" name="fields" value="{{ fields_text|default('') }}">
           <div class="row">
             {{ form.form_text(columns=4, label='附加信息', id='field', autocomplete='off', row=False) }}
             <label>
